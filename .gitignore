@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+publish/
+publish-folder/
+
+# Installer output
+installer/*.exe
+
+# Rider / IDE
+.idea/
+*.user
+*.suo
+
+# Logs / crash dumps
+*.log
+replay_pid*.log
+
+# OS
+Thumbs.db
+desktop.ini

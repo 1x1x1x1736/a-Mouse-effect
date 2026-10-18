@@ -1,0 +1,178 @@
+<Window x:Class="MouseEffects.ControlPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mouse Effects"
+        Width="280"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        ResizeMode="NoResize"
+        Background="#1E1E2E"
+        FontFamily="Segoe UI">
+    <Window.Resources>
+        <Style x:Key="ToggleBtn" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="#DDDDDD"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="bd"
+                                Background="#2A2A3C"
+                                BorderBrush="#3A3A50"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="10,7">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#3D5AFE"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#8C9EFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#777788"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Swatch" TargetType="RadioButton">
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="9"
+                                BorderThickness="2"
+                                BorderBrush="Transparent"
+                                Margin="2"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="14">
+        <TextBlock Text="Mouse Effects"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   Margin="2,0,0,2"/>
+        <TextBlock Text="Closing this window keeps effects running. Reopen from the tray icon (double-click or right-click)."
+                   FontSize="10"
+                   Foreground="#9E9E9E"
+                   TextWrapping="Wrap"
+                   Margin="2,0,0,12"/>
+
+        <ToggleButton x:Name="CircleToggle"
+                      Style="{StaticResource ToggleBtn}"
+                      IsChecked="True"
+                      Checked="CircleToggle_Changed"
+                      Unchecked="CircleToggle_Changed"
+                      Content="&#x25CF;  Cursor Circle"/>
+        <WrapPanel x:Name="CircleSwatches" Margin="28,6,0,4"/>
+        <StackPanel Orientation="Horizontal" Margin="28,0,0,10">
+            <TextBlock Text="Size" Foreground="#9E9E9E" VerticalAlignment="Center" Width="30"/>
+            <Slider x:Name="SizeSlider"
+                    Minimum="16"
+                    Maximum="96"
+                    Value="40"
+                    Width="150"
+                    VerticalAlignment="Center"
+                    ValueChanged="SizeSlider_ValueChanged"/>
+            <TextBlock x:Name="SizeLabel"
+                       Text="40"
+                       Foreground="#9E9E9E"
+                       VerticalAlignment="Center"
+                       Margin="8,0,0,0"/>
+        </StackPanel>
+
+        <ToggleButton x:Name="TrailToggle"
+                      Style="{StaticResource ToggleBtn}"
+                      IsChecked="True"
+                      Checked="TrailToggle_Changed"
+                      Unchecked="TrailToggle_Changed"
+                      Content="&#x2734;  Mouse Trail"/>
+        <WrapPanel x:Name="TrailSwatches" Margin="28,6,0,10"/>
+
+        <ToggleButton x:Name="RippleToggle"
+                      Style="{StaticResource ToggleBtn}"
+                      IsChecked="True"
+                      Checked="RippleToggle_Changed"
+                      Unchecked="RippleToggle_Changed"
+                      Content="&#x25C9;  Click Ripple"/>
+        <WrapPanel x:Name="RippleSwatches" Margin="28,6,0,14"/>
+
+        <Button Foreground="#DDDDDD"
+                FontSize="12"
+                Cursor="Hand"
+                HorizontalAlignment="Stretch"
+                Margin="0,4,0,0"
+                Click="Save_Click"
+                Content="Save">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd"
+                            Background="#1F3D24"
+                            BorderBrush="#3A7D44"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="10,7">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#2A5531"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <TextBlock x:Name="SaveStatus"
+                   Text="Saved"
+                   Foreground="#7ED992"
+                   FontSize="11"
+                   HorizontalAlignment="Center"
+                   Margin="0,4,0,0"
+                   Visibility="Collapsed"/>
+
+        <Button Foreground="#DDDDDD"
+                FontSize="12"
+                Cursor="Hand"
+                HorizontalAlignment="Stretch"
+                Margin="0,6,0,0"
+                Click="Exit_Click"
+                Content="Minimize">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd"
+                            Background="#4A1F24"
+                            BorderBrush="#7A3038"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="10,7">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#6A2A30"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </StackPanel>
+</Window>
