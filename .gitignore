@@ -4,8 +4,10 @@ obj/
 publish/
 publish-folder/
 
-# Installer output
+# Installer / package output
 installer/*.exe
+installer/*.zip
+*.zip
 
 # Rider / IDE
 .idea/
