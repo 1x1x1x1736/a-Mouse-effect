@@ -18,13 +18,28 @@ Each effect can be toggled on/off and recolored from a simple control panel. The
   reopen it from the tray icon (double-click, or right-click → *Open Mouse Effects*)
 - Configurable to start automatically with Windows
 
-## Install
+## Download
 
-1. Download the latest **`MouseEffectsSetup.exe`** from the [Releases](../../releases) page.
-2. Run it. It's a **per-user install** — no administrator rights or UAC prompt required.
-3. Launch **Mouse Effects** from the Start menu (or from the desktop shortcut, if selected).
+Grab the build for your Windows architecture from the [Releases](../../releases) page.
+Not sure which one — pick **x64**.
 
-The installer is self-contained and bundles everything it needs — you do **not** need to install .NET separately.
+| Architecture | Portable | Installer |
+| --- | --- | --- |
+| Windows x64 (most PCs) | `MouseEffects_win_x64_<version>.zip` | `MouseEffects_win_x64_<version>_setup.exe` |
+| Windows x86 (32-bit) | `MouseEffects_win_x86_<version>.zip` | `MouseEffects_win_x86_<version>_setup.exe` |
+| Windows on ARM | `MouseEffects_win_arm64_<version>.zip` | `MouseEffects_win_arm64_<version>_setup.exe` |
+
+Every build is **self-contained** — you do **not** need to install .NET separately.
+
+### Portable
+
+Extract the zip and run `MouseEffects.exe`.
+
+### Installer
+
+1. Run `MouseEffects_win_<arch>_<version>_setup.exe`.
+2. It's a **per-user install** — no administrator rights or UAC prompt required.
+3. Launch **Mouse Effects** from the Start menu (or the desktop shortcut, if selected).
 
 To uninstall, use *Settings → Apps → Installed apps → Mouse Effects*, or the uninstaller in the install folder.
 
@@ -48,24 +63,36 @@ Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download).
 # Run from source
 dotnet run
 
-# Produce a self-contained, publishable build
-dotnet publish MouseEffects.csproj -c Release -r win-x64 --self-contained true -o publish
+# Produce a self-contained build for one architecture
+dotnet publish MouseEffects.csproj -c Release -r win-x64 --self-contained true -o publish-x64
 ```
 
-### Build the installer
+Supported runtimes: `win-x64`, `win-x86`, `win-arm64`.
 
-The installer is built with [Inno Setup 6](https://jrsoftware.org/isinfo.php).
+### Build all releases (zips + installers)
+
+Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php) (the script looks for it under
+`%LOCALAPPDATA%\Programs\Inno Setup 6` or `Program Files (x86)`).
 
 ```powershell
-dotnet publish MouseEffects.csproj -c Release -r win-x64 --self-contained true -o publish
-& "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe" installer.iss
+./build.ps1
 ```
 
-The setup program is written to `installer\MouseEffectsSetup.exe`.
+This publishes every architecture and writes the artifacts to `installer\`:
+
+- `MouseEffects_win_<arch>_<version>.zip` — portable
+- `MouseEffects_win_<arch>_<version>_setup.exe` — installer
+
+Or build manually:
+
+```powershell
+dotnet publish MouseEffects.csproj -c Release -r win-x64 --self-contained true -o publish-x64
+& "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe" /DArch=x64 installer.iss
+```
 
 > **Note:** do not publish with `PublishSingleFile`. WPF requires its native
 > libraries (`wpfgfx_cor3.dll`, `PresentationNative_cor3.dll`, …) to sit next to the
-> executable; the installer packs the whole `publish` folder.
+> executable; the installer packs the whole `publish-<arch>` folder.
 
 ## Project layout
 

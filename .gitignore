@@ -2,7 +2,7 @@
 bin/
 obj/
 publish/
-publish-folder/
+publish-*/
 
 # Installer / package output
 installer/*.exe
